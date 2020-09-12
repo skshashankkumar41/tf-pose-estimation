@@ -1,7 +1,7 @@
 import argparse
 import logging
 import time
-
+from PIL import Image, ImageDraw, ImageFilter
 import cv2
 import numpy as np
 
@@ -18,18 +18,21 @@ else:
 
 cam = cv2.VideoCapture(args['camera'])
 ret_val, image = cam.read()
-vid_writer = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (image.shape[1],image.shape[0]))
+print("IMAGESHAPE:::",image.shape)
+vid_writer = cv2.VideoWriter('output.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (image.shape[1],image.shape[0]),True)
 while True:
     ret_val, image = cam.read()
-
+    
     humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=args['resize_out_ratio'])
-    image = np.zeros(image.shape)
-    image = TfPoseEstimator.draw_humans(image, humans, imgcopy=False)
+    image[image != 0] = 0
+    #print("ZEROS::",image.shape)
+    image = TfPoseEstimator.draw_humans(image, humans, imgcopy=True)
+    print("SHAPE::",image.shape)
 
-    cv2.putText(image,
-                "FPS: %f" % (1.0 / (time.time() - fps_time)),
-                (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
-                (0, 255, 0), 2)
+    # cv2.putText(image,
+    #             "FPS: %f" % (1.0 / (time.time() - fps_time)),
+    #             (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+    #             (0, 255, 0), 2)
     cv2.imshow('tf-pose-estimation result', image)
     fps_time = time.time()
     vid_writer.write(image)
