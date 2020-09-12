@@ -1,0 +1,7 @@
+1. Clone the repository using git clone https://github.com/skshashankkumar41/tf-pose-estimation.git
+2. Change Directory to tf-pose-estimation
+3. Run python setup.py install
+4. [Optional if Models doesn't Install] Run pip3 install -r requirements.txt 
+4. Run python create_pose.py -----> To create the tutorial using webcam and store in same directory or you can use --path arguement to change the saving directory
+5. Run python compare_pose.py ------> To start the tutorial to teach pose w.r.t to webcam input
+6. For More arguements look at create_pose.py and compare_pose.py
