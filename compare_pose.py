@@ -7,7 +7,6 @@ import numpy as np
 from scipy.spatial import distance
 from tf_pose.estimator import TfPoseEstimator
 from tf_pose.networks import get_graph_path, model_wh
-from sklearn.preprocessing import Normalizer
 fps_time = 0
 
 parser = argparse.ArgumentParser(description='pose-comparator')
@@ -59,10 +58,9 @@ while cam_store.isOpened():
         #             (10, 10),  cv2.FONT_HERSHEY_SIMPLEX, 0.5,
         #             (0, 255, 0), 2)q
         #cv2.imshow('tf-pose-estimation result', final)
-        norm = Normalizer()
-        Aflat = norm.fit_transform(blackImage.flatten(order='C'))
-        Bflat = norm.transform(image_store.flatten(order='C'))
-
+        Aflat = blackImage.flatten(order='C')
+        Bflat = image_store.flatten(order='C')
+        
         dist = distance.cosine(Aflat, Bflat)
         print("Similarity:",dist)
         if dist > 0.90:
